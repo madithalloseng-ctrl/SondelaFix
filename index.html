@@ -1,0 +1,2818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sondelafix — Local. Trusted. Connected.</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;background:#f6f6f2;color:#111}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0}
+.app{max-width:1200px;margin:auto;min-height:100vh;padding-bottom:100px}
+
+/* NAV */
+.topbar{
+height:72px;background:white;display:flex;align-items:center;
+justify-content:space-between;padding:0 25px;border-bottom:1px solid #e6e6e1;
+position:sticky;top:0;z-index:50
+}
+.logo{font-size:29px;font-weight:900;letter-spacing:-2px;cursor:pointer}
+.logo span{color:#4778ff}
+.logo i{display:inline-block;width:8px;height:8px;background:#ff4d4d;border-radius:50%;margin-left:3px}
+.top-right{display:flex;align-items:center;gap:10px}
+.safe-badge{background:#e7f8ef;color:#15805a;border-radius:20px;padding:8px 12px;font-size:10px;font-weight:bold}
+.icon-btn{width:40px;height:40px;border-radius:50%;background:#f1f1ed}
+.account-mini{display:flex;align-items:center;gap:7px;background:#f1f1ed;padding:5px 10px 5px 5px;border-radius:25px;font-size:11px;font-weight:bold}
+.mini-avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#ffd83d}
+
+/* LOCATION */
+.location-banner{
+margin:16px 20px;padding:14px;background:#111;color:#fff;border-radius:17px;
+display:flex;align-items:center;gap:12px
+}
+.location-symbol{width:42px;height:42px;background:#ffd83d;color:#111;border-radius:12px;display:grid;place-items:center;font-size:20px}
+.location-text{flex:1}
+.location-text strong{display:block;font-size:14px}
+.location-text small{color:#bbb;font-size:11px}
+.enable-location{background:#ffd83d;padding:10px 15px;border-radius:10px;font-weight:bold}
+.demo-location{background:#4778ff;color:white;padding:10px 15px;border-radius:10px;font-weight:bold}
+.close-location{background:#292929;color:#fff;width:34px;height:34px;border-radius:50%}
+
+/* HERO */
+.hero{
+margin:20px;min-height:430px;border-radius:30px;background:#111;color:white;
+padding:60px;position:relative;overflow:hidden;display:flex;align-items:center
+}
+.hero-content{max-width:650px;position:relative;z-index:2}
+.eyebrow{color:#aaa;font-size:10px;font-weight:bold;letter-spacing:2px}
+.eyebrow:before{content:"";display:inline-block;width:8px;height:8px;background:#35c98a;border-radius:50%;margin-right:7px}
+.hero h1{font-size:clamp(48px,7vw,78px);line-height:.92;letter-spacing:-5px;margin:20px 0}
+.hero h1 span{color:#ffd83d}
+.hero p{color:#c8c8c8;line-height:1.6;max-width:560px}
+.hero-search{
+margin-top:25px;background:white;padding:8px;border-radius:15px;width:min(520px,100%);
+display:flex;align-items:center;gap:10px;color:#777
+}
+.hero-search input{flex:1;border:0;outline:0;padding:10px}
+.search-button{background:#4778ff;color:#fff;width:40px;height:40px;border-radius:11px;font-size:20px}
+.yellow-circle{position:absolute;width:290px;height:290px;background:#ffd83d;border-radius:50%;right:-60px;top:-80px}
+.pink-circle{position:absolute;width:230px;height:230px;background:#ff7db7;border-radius:50%;right:70px;bottom:-130px}
+.hero-sticker{
+position:absolute;right:65px;bottom:45px;background:#ff4d4d;width:115px;height:115px;
+border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+color:#111;font-size:13px;font-weight:bold;transform:rotate(8deg);z-index:3
+}
+
+/* TRUST */
+.trust-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 20px 35px}
+.trust-box{background:#fff;border:1px solid #e6e6e1;border-radius:15px;padding:15px;font-size:12px;color:#666}
+.trust-box strong{color:#111}
+
+/* SECTIONS */
+.section{padding:0 20px;margin-bottom:40px}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:17px}
+.kicker{font-size:10px;font-weight:bold;letter-spacing:1.5px;color:#888}
+.section h2{font-size:27px;letter-spacing:-1px;margin-top:4px}
+.text-button{background:none;color:#4778ff;font-weight:bold}
+
+/* CATEGORIES */
+.categories{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+.category{
+min-height:120px;border-radius:18px;display:flex;flex-direction:column;
+justify-content:center;align-items:center;gap:10px;transition:.2s
+}
+.category:hover{transform:translateY(-4px)}
+.category .emoji{font-size:31px}
+.category strong{font-size:11px}
+.green{background:#c9f5e1}.blue{background:#cddaff}.yellow{background:#ffe990}
+.pink{background:#ffd0e5}.red{background:#ffcccc}.orange{background:#ffd6b4}
+.purple{background:#ddd3ff}.black{background:#222;color:white}
+
+/* PROVIDERS */
+.providers{display:grid;gap:12px}
+.provider{
+background:#fff;border:1px solid #e4e4df;border-radius:19px;padding:15px;
+display:flex;align-items:center;gap:14px;transition:.2s
+}
+.provider:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.06)}
+.provider.near{border:2px solid #9de3c3}
+.provider-avatar{
+width:62px;height:62px;border-radius:17px;display:grid;place-items:center;
+font-size:30px;flex-shrink:0
+}
+.provider-info{flex:1;min-width:0}
+.provider-title{display:flex;align-items:center;gap:6px}
+.provider-title h3{font-size:15px}
+.verified{color:#4778ff;font-size:17px}
+.provider-info p{color:#777;font-size:12px;margin:5px 0 8px}
+.meta{display:flex;gap:8px;align-items:center;color:#777;font-size:11px;flex-wrap:wrap}
+.rating{color:#d08c00;font-weight:bold}
+.provider-bottom{display:flex;align-items:center;gap:8px;margin-top:9px}
+.price{font-size:12px;font-weight:bold}
+.near-tag{background:#e3f8ee;color:#15805a;font-size:8px;font-weight:bold;padding:4px 6px;border-radius:5px}
+.arrow{width:39px;height:39px;border-radius:50%;background:#f1f1ed;font-size:18px}
+
+/* LOCATION CTA */
+.location-cta{
+margin-top:14px;width:100%;background:#ffd83d;padding:15px;border-radius:17px;
+display:flex;align-items:center;gap:12px;text-align:left
+}
+.location-cta span{flex:1}
+.location-cta strong{display:block}
+.location-cta small{color:#655600}
+
+/* PAGE */
+.page{padding:30px 20px}
+.page-title{margin-bottom:22px}
+.page-title h1{font-size:42px;letter-spacing:-2px;margin:6px 0}
+.page-title p{color:#777}
+.search-bar{background:#fff;border:1px solid #e4e4df;border-radius:15px;padding:14px;display:flex;gap:10px}
+.search-bar input{flex:1;border:0;outline:0}
+.filters{display:flex;gap:8px;overflow-x:auto;padding:14px 0}
+.filter{white-space:nowrap;background:#fff;border:1px solid #ddd;padding:9px 12px;border-radius:20px;font-size:11px}
+.filter.active{background:#111;color:#fff}
+.distance-control{background:#fff;border:1px solid #e5e5e0;border-radius:15px;padding:15px;margin-bottom:15px}
+.distance-top{display:flex;justify-content:space-between;font-size:12px;margin-bottom:10px}
+input[type=range]{width:100%;accent-color:#4778ff}
+.result-count{display:flex;justify-content:space-between;margin:18px 0 10px;font-size:12px}
+.result-count span{color:#888}
+
+/* PROFILE */
+.profile-card{
+background:#111;color:#fff;border-radius:25px;padding:30px;position:relative;overflow:hidden
+}
+.profile-card .decor{
+position:absolute;width:150px;height:150px;background:#ffd83d;border-radius:50%;right:-50px;top:-50px
+}
+.profile-avatar-large{
+width:80px;height:80px;border-radius:22px;background:#ffd83d;color:#111;
+display:grid;place-items:center;font-size:38px;position:relative
+}
+.profile-card h1{margin-top:18px;position:relative}
+.profile-card p{color:#aaa;margin-top:7px;position:relative}
+.profile-stats{display:flex;gap:25px;margin-top:22px;position:relative}
+.profile-stat strong{display:block;font-size:19px}
+.profile-stat small{color:#aaa;font-size:9px}
+
+/* MODE */
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px}
+.mode{background:#fff;border:1px solid #e4e4df;border-radius:17px;padding:20px;text-align:left}
+.mode strong{display:block;margin:8px 0 5px}
+.mode span{color:#777;font-size:11px}
+
+/* BUTTONS */
+.primary{width:100%;background:#111;color:#fff;padding:14px;border-radius:12px;font-weight:bold}
+.blue-button{background:#4778ff;color:#fff;padding:12px 17px;border-radius:11px;font-weight:bold}
+.green-button{background:#35c98a;color:#073d29;padding:12px 17px;border-radius:11px;font-weight:bold}
+.secondary{background:#f1f1ed;color:#111;padding:12px 17px;border-radius:11px;font-weight:bold}
+.danger{background:#ffe3e3;color:#c52e2e;padding:10px 15px;border-radius:10px;font-weight:bold}
+
+/* MODALS */
+.modal{
+position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;
+align-items:center;justify-content:center;padding:20px;z-index:100
+}
+.modal.show{display:flex}
+.modal-box{
+background:#fff;width:min(540px,100%);max-height:90vh;overflow:auto;
+border-radius:25px;padding:25px;position:relative
+}
+.modal-close{position:absolute;right:18px;top:18px;width:37px;height:37px;border-radius:50%;background:#f1f1ed}
+.modal-avatar{width:70px;height:70px;border-radius:19px;display:grid;place-items:center;font-size:33px}
+.modal-box h2{margin-top:15px}
+.modal-sub{color:#777;margin:5px 0 15px}
+.safety-box{background:#e8f8f1;color:#167554;padding:13px;border-radius:13px;font-size:11px;margin-bottom:17px}
+.form-group{margin-bottom:15px}
+.form-group label{display:block;font-size:12px;font-weight:bold;margin-bottom:6px}
+.form-group input,.form-group textarea,.form-group select{
+width:100%;border:1px solid #ddd;border-radius:11px;padding:11px;outline:0;background:white
+}
+.form-group textarea{resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* PROVIDER PROFILE */
+.detail-header{display:flex;gap:15px;align-items:center;margin-bottom:20px}
+.detail-avatar{width:80px;height:80px;border-radius:22px;display:grid;place-items:center;font-size:40px}
+.detail-rating{margin-top:7px;color:#d08c00;font-weight:bold;font-size:13px}
+.detail-section{border-top:1px solid #eee;padding:18px 0}
+.detail-section h3{font-size:14px;margin-bottom:8px}
+.detail-section p{font-size:12px;color:#666;line-height:1.6}
+.service-pills{display:flex;flex-wrap:wrap;gap:7px}
+.service-pill{background:#f1f1ed;padding:7px 10px;border-radius:20px;font-size:10px}
+.detail-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+
+/* BOOKINGS */
+.booking{
+background:#fff;border:1px solid #e4e4df;border-radius:17px;padding:15px;
+display:flex;gap:13px;align-items:center;margin-bottom:10px
+}
+.booking-details{flex:1}
+.booking-details h3{font-size:14px}
+.booking-details p{font-size:11px;color:#777;margin:4px 0}
+.status{background:#fff1bd;color:#806500;border-radius:20px;padding:6px 9px;font-size:9px;font-weight:bold}
+
+/* MESSAGES */
+.message-list{display:grid;gap:10px}
+.conversation{
+background:#fff;border:1px solid #e4e4df;border-radius:18px;padding:15px;
+display:flex;gap:12px;align-items:center;cursor:pointer
+}
+.conversation:hover{border-color:#4778ff}
+.conversation-info{flex:1}
+.conversation-info h3{font-size:14px}
+.conversation-info p{font-size:11px;color:#777;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.unread{width:9px;height:9px;background:#ff4d4d;border-radius:50%}
+.chat{
+display:flex;flex-direction:column;height:520px;background:#f5f5f1;border-radius:18px;overflow:hidden
+}
+.chat-header{background:#fff;padding:15px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #ddd}
+.chat-header-info{flex:1}
+.chat-header-info strong{display:block;font-size:13px}
+.chat-header-info small{color:#35a875}
+.chat-body{flex:1;padding:18px;overflow:auto;display:flex;flex-direction:column;gap:10px}
+.bubble{max-width:75%;padding:11px 13px;border-radius:16px;font-size:12px;line-height:1.4}
+.bubble.them{background:#fff;align-self:flex-start;border-bottom-left-radius:4px}
+.bubble.me{background:#4778ff;color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.chat-input{background:#fff;padding:10px;display:flex;gap:8px}
+.chat-input input{flex:1;border:1px solid #ddd;border-radius:12px;padding:10px;outline:0}
+.send{background:#111;color:white;border-radius:12px;padding:0 15px}
+
+/* EMPTY */
+.empty{background:#fff;border:1px solid #e5e5e0;border-radius:20px;padding:40px;text-align:center}
+.empty-icon{font-size:35px;margin-bottom:10px}
+.empty p{color:#777;margin-top:7px;line-height:1.5}
+
+/* DEMO */
+.demo-box{background:#fff3bd;border:1px solid #ead36a;padding:15px;border-radius:15px;margin-bottom:18px;font-size:11px}
+.demo-box strong{display:block;margin-bottom:5px}
+.demo-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* NAV */
+.bottom-nav{
+position:fixed;bottom:15px;left:50%;transform:translateX(-50%);
+width:min(600px,calc(100% - 28px));height:68px;background:#111;border-radius:23px;
+display:grid;grid-template-columns:repeat(5,1fr);padding:6px;z-index:50;
+box-shadow:0 15px 40px rgba(0,0,0,.25)
+}
+.nav{background:transparent;color:#888;border-radius:17px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:9px}
+.nav.active{background:#fff;color:#111}
+
+/* RESPONSIVE */
+@media(max-width:800px){
+.hero{margin:12px;padding:38px 25px;min-height:460px}
+.hero h1{font-size:52px;letter-spacing:-4px}
+.hero-sticker{right:25px;bottom:25px;width:90px;height:90px;font-size:10px}
+.yellow-circle{width:200px;height:200px}.pink-circle{width:160px;height:160px}
+.categories{grid-template-columns:repeat(4,1fr)}
+.trust-row{grid-template-columns:1fr}
+.safe-badge{display:none}
+.location-banner{align-items:flex-start;flex-wrap:wrap}
+.location-text{min-width:calc(100% - 60px)}
+.enable-location,.demo-location{margin-left:54px}
+}
+@media(max-width:500px){
+.topbar{padding:0 15px}.logo{font-size:24px}.account-mini span{display:none}
+.page-title h1{font-size:35px}
+.provider-avatar{width:53px;height:53px;font-size:25px}
+.provider{padding:12px;gap:10px}
+.provider-title h3{font-size:13px}
+.categories{gap:7px}.category{min-height:100px}.category .emoji{font-size:25px}.category strong{font-size:9px}
+.mode-grid,.detail-actions,.form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- TOP BAR -->
+<header class="topbar">
+
+<div class="logo" onclick="showPage('home')">
+sondela<span>fix</span><i></i>
+</div>
+
+<div class="top-right">
+
+<div class="safe-badge">🛡 SAFE LOCAL</div>
+
+<div class="account-mini">
+<div class="mini-avatar" id="miniAvatar">👤</div>
+<span id="miniName">Guest</span>
+</div>
+
+<button class="icon-btn" onclick="openAccountSwitcher()">👤</button>
+
+</div>
+</header>
+
+
+<!-- LOCATION -->
+<div class="location-banner" id="locationBanner">
+
+<div class="location-symbol">📍</div>
+
+<div class="location-text">
+<strong>Turn on your location</strong>
+<small>We'll prioritise trusted providers within 5–10 km of you.</small>
+</div>
+
+<button class="enable-location" onclick="getLocation()">Enable</button>
+
+<button class="demo-location" onclick="useDemoLocation()">Demo location</button>
+
+<button class="close-location" onclick="closeLocation()">×</button>
+
+</div>
+
+
+<!-- HOME -->
+<section id="homePage">
+
+<section class="hero">
+
+<div class="yellow-circle"></div>
+<div class="pink-circle"></div>
+
+<div class="hero-content">
+
+<div class="eyebrow">LOCAL. TRUSTED. CONNECTED.</div>
+
+<h1>
+Get things done.<br>
+<span>Safely.</span>
+</h1>
+
+<p>
+Find trusted local people for the jobs you need — from cleaning and repairs
+to tutoring, beauty, gardening and more.
+</p>
+
+<div class="hero-search">
+🔎
+<input id="homeSearch" placeholder="What do you need help with?" onkeydown="homeSearch(event)">
+<button class="search-button" onclick="searchFromHome()">→</button>
+</div>
+
+</div>
+
+<div class="hero-sticker">
+<span>NEAR</span>
+<strong>&</strong>
+<span>TRUSTED</span>
+</div>
+
+</section>
+
+
+<div class="trust-row">
+
+<div class="trust-box">
+🛡 <strong>Safety first.</strong>
+Verified providers, reviews and reporting.
+</div>
+
+<div class="trust-box">
+📍 <strong>Local first.</strong>
+Nearby providers get priority.
+</div>
+
+<div class="trust-box">
+🤝 <strong>Community powered.</strong>
+Connect with local talent.
+</div>
+
+</div>
+
+
+<section class="section">
+
+<div class="section-head">
+<div>
+<div class="kicker">BROWSE</div>
+<h2>What do you need?</h2>
+</div>
+
+<button class="text-button" onclick="showPage('explore')">See all →</button>
+</div>
+
+<div class="categories" id="categories"></div>
+
+</section>
+
+
+<section class="section">
+
+<div class="section-head">
+<div>
+<div class="kicker">RECOMMENDED</div>
+<h2>Near you</h2>
+</div>
+
+<button class="text-button" onclick="showPage('explore')">View all →</button>
+</div>
+
+<div class="providers" id="homeProviders"></div>
+
+<button class="location-cta" id="locationCTA" onclick="getLocation()">
+📍
+<span>
+<strong>Enable location</strong>
+<small>Prioritise providers within 5–10 km</small>
+</span>
+→
+</button>
+
+</section>
+
+</section>
+
+
+<!-- EXPLORE -->
+<section id="explorePage" class="page" style="display:none">
+
+<div class="page-title">
+<div class="kicker">DISCOVER</div>
+<h1>Find local help.</h1>
+<p>Search trusted people and businesses around you.</p>
+</div>
+
+
+<div class="search-bar">
+🔎
+<input id="searchInput" placeholder="Search cleaning, tutoring, repairs..." oninput="renderExplore()">
+</div>
+
+
+<div class="filters" id="filters"></div>
+
+
+<div class="distance-control">
+
+<div class="distance-top">
+<strong>📍 Maximum distance</strong>
+<span id="distanceLabel">Location off</span>
+</div>
+
+<input id="radius" type="range" min="5" max="20" step="5" value="10" oninput="renderExplore()">
+
+<div style="display:flex;justify-content:space-between;color:#999;font-size:9px;margin-top:5px">
+<span>5 km</span>
+<span>10 km</span>
+<span>15 km</span>
+<span>20 km</span>
+</div>
+
+</div>
+
+
+<div class="result-count">
+<strong id="resultCount">0 providers</strong>
+<span id="sortText">Popular nearby</span>
+</div>
+
+<div class="providers" id="exploreProviders"></div>
+
+</section>
+
+
+<!-- BOOKINGS -->
+<section id="bookingsPage" class="page" style="display:none">
+
+<div class="page-title">
+<div class="kicker">YOUR ACTIVITY</div>
+<h1>Bookings</h1>
+<p>Keep track of your service requests.</p>
+</div>
+
+<div class="demo-box">
+<strong>🎬 Prototype demonstration</strong>
+Bookings are stored in this browser so you can demonstrate the complete customer journey.
+</div>
+
+<div id="bookingsList"></div>
+
+</section>
+
+
+<!-- MESSAGES -->
+<section id="messagesPage" class="page" style="display:none">
+
+<div id="messagesHome">
+
+<div class="page-title">
+<div class="kicker">CONNECT</div>
+<h1>Messages</h1>
+<p>Chat with providers about your jobs.</p>
+</div>
+
+<div id="messageList" class="message-list"></div>
+
+</div>
+
+<div id="chatWindow" style="display:none"></div>
+
+</section>
+
+
+<!-- PROFILE -->
+<section id="profilePage" class="page" style="display:none">
+
+<div class="demo-box">
+<strong>🧪 Prototype account</strong>
+This profile is a demonstration account. In a real Sondelafix release,
+identity verification and account security would be handled by the backend.
+</div>
+
+<div class="profile-card">
+
+<div class="decor"></div>
+
+<div class="profile-avatar-large" id="profileAvatar">👤</div>
+
+<h1 id="profileName">Your Name</h1>
+
+<p id="profileBio">Create your profile to get started.</p>
+
+<div class="profile-stats">
+<div class="profile-stat">
+<strong id="profileBookings">0</strong>
+<small>BOOKINGS</small>
+</div>
+
+<div class="profile-stat">
+<strong id="profileMessages">0</strong>
+<small>MESSAGES</small>
+</div>
+
+<div class="profile-stat">
+<strong>✓</strong>
+<small>SAFETY</small>
+</div>
+</div>
+
+</div>
+
+
+<div style="margin-top:18px;display:grid;gap:10px">
+
+<button class="primary" onclick="openProfileEditor()">
+✏️ Edit my profile
+</button>
+
+<button class="secondary" onclick="openAccountSwitcher()">
+🔄 Switch demo account
+</button>
+
+</div>
+
+
+<div class="mode-grid">
+
+<button class="mode" onclick="createProviderProfile()">
+💼
+<strong>Become a provider</strong>
+<span>Offer your skills to local customers.</span>
+</button>
+
+<button class="mode" onclick="showSafety()">
+🛡
+<strong>Safety centre</strong>
+<span>Learn how Sondelafix protects users.</span>
+</button>
+
+</div>
+
+</section>
+
+</div>
+
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+
+<button class="nav active" id="nav-home" onclick="showPage('home')">
+🏠<span>Home</span>
+</button>
+
+<button class="nav" id="nav-explore" onclick="showPage('explore')">
+🔎<span>Explore</span>
+</button>
+
+<button class="nav" id="nav-bookings" onclick="showPage('bookings')">
+📅<span>Bookings</span>
+</button>
+
+<button class="nav" id="nav-messages" onclick="showPage('messages')">
+💬<span>Messages</span>
+</button>
+
+<button class="nav" id="nav-profile" onclick="showPage('profile')">
+👤<span>Profile</span>
+</button>
+
+</nav>
+
+
+<!-- GENERIC MODAL -->
+<div class="modal" id="modal">
+<div class="modal-box" id="modalContent"></div>
+</div>
+
+
+<script>
+
+/* =====================================================
+   SONDELAFIX PROTOTYPE
+   Everything is contained in this one HTML file.
+===================================================== */
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+const categories=[
+
+["cleaning","🧽","Cleaning","green"],
+["repairs","🔧","Repairs","blue"],
+["gardening","🌱","Gardening","yellow"],
+["beauty","💅","Beauty","pink"],
+["tutoring","📚","Tutoring","red"],
+["tech","💻","Tech help","black"],
+["catering","🍲","Catering","orange"],
+["moving","📦","Moving","purple"]
+
+];
+
+
+/* =========================
+   DEMO PROVIDERS
+========================= */
+
+let providers=[
+
+{
+id:1,
+name:"Lebo's Cleaning Co.",
+service:"Home cleaning",
+category:"cleaning",
+rating:4.9,
+reviews:84,
+price:"From R180",
+lat:-26.1076,
+lng:28.0567,
+area:"Sandton",
+emoji:"🧽",
+color:"green",
+bio:"Friendly, reliable home cleaning for busy households.",
+services:["Deep cleaning","Regular cleaning","Kitchen cleaning","Move-out cleaning"],
+verified:true
+},
+
+{
+id:2,
+name:"Thabo Tech Repairs",
+service:"Phone & computer repairs",
+category:"tech",
+rating:4.8,
+reviews:126,
+price:"From R150",
+lat:-26.0941,
+lng:28.0522,
+area:"Rosebank",
+emoji:"💻",
+color:"blue",
+bio:"Affordable technology repairs and setup for homes and small businesses.",
+services:["Laptop repair","Phone repair","Wi-Fi setup","Computer setup"],
+verified:true
+},
+
+{
+id:3,
+name:"Mpho's Garden Crew",
+service:"Gardening & lawn care",
+category:"gardening",
+rating:4.7,
+reviews:61,
+price:"From R220",
+lat:-26.1185,
+lng:28.0441,
+area:"Parkmore",
+emoji:"🌱",
+color:"yellow",
+bio:"Keeping local gardens clean, healthy and beautiful.",
+services:["Lawn mowing","Garden maintenance","Tree trimming","Planting"],
+verified:true
+},
+
+{
+id:4,
+name:"Nala Beauty Studio",
+service:"Braids, nails & beauty",
+category:"beauty",
+rating:4.9,
+reviews:103,
+price:"From R200",
+lat:-26.0878,
+lng:28.0349,
+area:"Illovo",
+emoji:"💅",
+color:"pink",
+bio:"Beauty services from a talented local entrepreneur.",
+services:["Braids","Nails","Gel nails","Hair styling"],
+verified:true
+},
+
+{
+id:5,
+name:"Kamo Tutors",
+service:"School tutoring",
+category:"tutoring",
+rating:4.8,
+reviews:47,
+price:"From R160/hr",
+lat:-26.1302,
+lng:28.0701,
+area:"Morningside",
+emoji:"📚",
+color:"red",
+bio:"Patient academic support for school learners.",
+services:["Mathematics","English","Life Sciences","History"],
+verified:true
+},
+
+{
+id:6,
+name:"Zee's Home Fix",
+service:"Small household repairs",
+category:"repairs",
+rating:4.6,
+reviews:39,
+price:"From R250",
+lat:-26.0724,
+lng:28.0122,
+area:"Craighall",
+emoji:"🔧",
+color:"blue",
+bio:"Helping households solve those annoying small repairs.",
+services:["Furniture repair","Doors","Shelves","Basic plumbing"],
+verified:true
+},
+
+{
+id:7,
+name:"Amahle Catering",
+service:"Home catering",
+category:"catering",
+rating:4.9,
+reviews:72,
+price:"From R350",
+lat:-26.1511,
+lng:28.0182,
+area:"Melville",
+emoji:"🍲",
+color:"orange",
+bio:"Home-style catering for small events and families.",
+services:["Lunch boxes","Events","Platters","Family meals"],
+verified:true
+},
+
+{
+id:8,
+name:"FastMove SA",
+service:"Small moves & deliveries",
+category:"moving",
+rating:4.5,
+reviews:31,
+price:"From R400",
+lat:-26.1637,
+lng:28.0614,
+area:"Sunninghill",
+emoji:"📦",
+color:"purple",
+bio:"Affordable local moving and delivery assistance.",
+services:["Small moves","Furniture delivery","Pickups","Packing"],
+verified:true
+}
+
+];
+
+
+/* =========================
+   DEMO ACCOUNTS
+========================= */
+
+let accounts=[
+
+{
+id:"customer",
+name:"Thando Mokoena",
+avatar:"👩🏾",
+type:"Customer",
+bio:"Looking for reliable local services.",
+location:"Sandton",
+phone:"071 234 5678"
+},
+
+{
+id:"provider1",
+name:"Lebo's Cleaning Co.",
+avatar:"🧽",
+type:"Provider",
+bio:"Reliable local cleaning services.",
+location:"Sandton",
+phone:"072 555 1234"
+},
+
+{
+id:"provider2",
+name:"Thabo Tech Repairs",
+avatar:"💻",
+type:"Provider",
+bio:"Technology repairs and support.",
+location:"Rosebank",
+phone:"073 555 2222"
+}
+
+];
+
+
+let currentAccount=
+JSON.parse(localStorage.getItem("sondelafixAccount"))
+||accounts[0];
+
+
+let bookings=
+JSON.parse(localStorage.getItem("sondelafixBookings"))
+||[];
+
+
+let messages=
+JSON.parse(localStorage.getItem("sondelafixMessages"))
+||[];
+
+
+let customerLocation=null;
+
+let selectedCategory=null;
+
+let selectedProvider=null;
+
+let editingProfile=false;
+
+
+/* =========================
+   STORAGE
+========================= */
+
+function saveData(){
+
+localStorage.setItem(
+"sondelafixAccount",
+JSON.stringify(currentAccount)
+);
+
+localStorage.setItem(
+"sondelafixBookings",
+JSON.stringify(bookings)
+);
+
+localStorage.setItem(
+"sondelafixMessages",
+JSON.stringify(messages)
+);
+
+}
+
+
+/* =========================
+   DISTANCE
+========================= */
+
+function distanceKm(lat1,lon1,lat2,lon2){
+
+const R=6371;
+
+const dLat=(lat2-lat1)*Math.PI/180;
+const dLon=(lon2-lon1)*Math.PI/180;
+
+const a=
+Math.sin(dLat/2)*Math.sin(dLat/2)+
+Math.cos(lat1*Math.PI/180)*
+Math.cos(lat2*Math.PI/180)*
+Math.sin(dLon/2)*Math.sin(dLon/2);
+
+return R*2*Math.atan2(
+Math.sqrt(a),
+Math.sqrt(1-a)
+);
+
+}
+
+
+/* =========================
+   RANK PROVIDERS
+========================= */
+
+function getRankedProviders(){
+
+let list=providers.map(provider=>{
+
+let distance=null;
+
+if(customerLocation){
+
+distance=distanceKm(
+customerLocation.lat,
+customerLocation.lng,
+provider.lat,
+provider.lng
+);
+
+}
+
+return{
+...provider,
+distance
+};
+
+});
+
+
+if(!customerLocation){
+
+return list.sort(
+(a,b)=>b.rating-a.rating
+);
+
+}
+
+
+return list.sort((a,b)=>{
+
+const priorityA=
+a.distance<=5?0:
+a.distance<=10?1:2;
+
+const priorityB=
+b.distance<=5?0:
+b.distance<=10?1:2;
+
+if(priorityA!==priorityB){
+
+return priorityA-priorityB;
+
+}
+
+return a.distance-b.distance;
+
+});
+
+}
+
+
+/* =========================
+   LOCATION
+========================= */
+
+function getLocation(){
+
+if(!navigator.geolocation){
+
+alert("Your browser does not support location.");
+
+return;
+
+}
+
+navigator.geolocation.getCurrentPosition(
+
+position=>{
+
+customerLocation={
+
+lat:position.coords.latitude,
+lng:position.coords.longitude
+
+};
+
+localStorage.setItem(
+"sondelafixLocation",
+JSON.stringify(customerLocation)
+);
+
+document.getElementById("locationBanner").style.display="none";
+
+document.getElementById("locationCTA").style.display="none";
+
+renderHomeProviders();
+renderExplore();
+
+},
+
+error=>{
+
+alert(
+"Location permission was not granted. You can use Demo Location instead for your presentation."
+);
+
+},
+
+{
+enableHighAccuracy:true,
+timeout:10000,
+maximumAge:60000
+}
+
+);
+
+}
+
+
+/* =========================
+   DEMO LOCATION
+========================= */
+
+function useDemoLocation(){
+
+/*
+This demo location is close to the fake
+providers so the distance feature can
+be demonstrated during a presentation.
+*/
+
+customerLocation={
+lat:-26.1076,
+lng:28.0567
+};
+
+localStorage.setItem(
+"sondelafixLocation",
+JSON.stringify(customerLocation)
+);
+
+document.getElementById(
+"locationBanner"
+).style.display="none";
+
+document.getElementById(
+"locationCTA"
+).style.display="none";
+
+renderHomeProviders();
+renderExplore();
+
+alert(
+"Demo location enabled! Providers will now be ranked by distance."
+);
+
+}
+
+
+function closeLocation(){
+
+document.getElementById(
+"locationBanner"
+).style.display="none";
+
+}
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+function renderCategories(){
+
+document.getElementById("categories").innerHTML=
+
+categories.map(c=>`
+
+<button
+class="category ${c[3]}"
+onclick="chooseCategory('${c[0]}')">
+
+<span class="emoji">${c[1]}</span>
+<strong>${c[2]}</strong>
+
+</button>
+
+`).join("");
+
+}
+
+
+function renderFilters(){
+
+document.getElementById("filters").innerHTML=`
+
+<button
+class="filter ${!selectedCategory?"active":""}"
+onclick="chooseCategory(null)">
+All
+</button>
+
+${
+categories.map(c=>`
+
+<button
+class="filter ${selectedCategory===c[0]?"active":""}"
+onclick="chooseCategory('${c[0]}')">
+
+${c[1]} ${c[2]}
+
+</button>
+
+`).join("")
+}
+
+`;
+
+}
+
+
+function chooseCategory(category){
+
+selectedCategory=category;
+
+renderFilters();
+
+showPage("explore");
+
+renderExplore();
+
+}
+
+
+/* =========================
+   PROVIDER CARD
+========================= */
+
+function providerCard(provider){
+
+let distanceText="Location off";
+
+let nearTag="";
+
+let nearClass="";
+
+
+if(provider.distance!==null){
+
+distanceText=
+provider.distance<1
+?"<1 km away"
+:provider.distance.toFixed(1)+" km away";
+
+
+if(provider.distance<=5){
+
+nearTag=`<span class="near-tag">VERY NEAR</span>`;
+
+nearClass="near";
+
+}
+
+}
+
+
+return`
+
+<article class="provider ${nearClass}">
+
+<div class="provider-avatar ${provider.color}">
+${provider.emoji}
+</div>
+
+<div class="provider-info">
+
+<div class="provider-title">
+
+<h3>${provider.name}</h3>
+
+${provider.verified?'<span class="verified">✓</span>':''}
+
+</div>
+
+<p>${provider.service}</p>
+
+<div class="meta">
+
+<span class="rating">
+★ ${provider.rating}
+</span>
+
+<span>(${provider.reviews})</span>
+
+<span>•</span>
+
+<span>📍 ${distanceText}</span>
+
+</div>
+
+<div class="provider-bottom">
+
+<span class="price">${provider.price}</span>
+
+${nearTag}
+
+</div>
+
+</div>
+
+<button
+class="arrow"
+onclick="openProvider(${provider.id})">
+↗
+</button>
+
+</article>
+
+`;
+
+}
+
+
+/* =========================
+   HOME
+========================= */
+
+function renderHomeProviders(){
+
+const list=getRankedProviders();
+
+document.getElementById(
+"homeProviders"
+).innerHTML=
+
+list.slice(0,4)
+.map(providerCard)
+.join("");
+
+}
+
+
+/* =========================
+   EXPLORE
+========================= */
+
+function renderExplore(){
+
+const container=
+document.getElementById(
+"exploreProviders"
+);
+
+const search=
+(
+document.getElementById("searchInput")
+?.value||""
+).toLowerCase();
+
+const radius=
+Number(
+document.getElementById("radius")?.value||10
+);
+
+let list=getRankedProviders();
+
+list=list.filter(provider=>{
+
+const text=
+(
+provider.name+
+" "+
+provider.service+
+" "+
+provider.area+
+" "+
+provider.category
+).toLowerCase();
+
+const searchMatch=
+!search||text.includes(search);
+
+const categoryMatch=
+!selectedCategory||
+provider.category===selectedCategory;
+
+const radiusMatch=
+!customerLocation||
+provider.distance<=radius;
+
+return searchMatch&&categoryMatch&&radiusMatch;
+
+});
+
+
+document.getElementById(
+"resultCount"
+).textContent=
+list.length+" providers";
+
+
+document.getElementById(
+"distanceLabel"
+).textContent=
+customerLocation
+?radius+" km"
+:"Location off";
+
+
+document.getElementById(
+"sortText"
+).textContent=
+customerLocation
+?"Sorted by distance"
+:"Popular nearby";
+
+
+if(!list.length){
+
+container.innerHTML=`
+
+<div class="empty">
+
+<div class="empty-icon">🔎</div>
+
+<h2>No providers found</h2>
+
+<p>
+Try increasing your distance or searching for another service.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+container.innerHTML=
+list.map(providerCard).join("");
+
+}
+
+
+/* =========================
+   PROVIDER PROFILE
+========================= */
+
+function openProvider(id){
+
+selectedProvider=
+providers.find(p=>p.id===id);
+
+if(!selectedProvider)return;
+
+
+const p=selectedProvider;
+
+let distance="Location not enabled";
+
+if(customerLocation){
+
+const d=distanceKm(
+customerLocation.lat,
+customerLocation.lng,
+p.lat,
+p.lng
+);
+
+distance=
+d<1?"Less than 1 km":d.toFixed(1)+" km";
+
+}
+
+
+document.getElementById(
+"modalContent"
+).innerHTML=`
+
+<button
+class="modal-close"
+onclick="closeModal()">
+×
+</button>
+
+<div class="detail-header">
+
+<div class="detail-avatar ${p.color}">
+${p.emoji}
+</div>
+
+<div>
+
+<div class="kicker">LOCAL PROVIDER</div>
+
+<h2>${p.name} ✓</h2>
+
+<div class="detail-rating">
+★ ${p.rating}
+<span style="color:#777">
+(${p.reviews} reviews)
+</span>
+</div>
+
+<div style="font-size:11px;color:#777;margin-top:5px">
+📍 ${p.area} • ${distance}
+</div>
+
+</div>
+
+</div>
+
+
+<div class="safety-box">
+
+🛡 <strong>Verified provider</strong><br>
+This demo provider has a verified identity badge,
+community reviews and a safety profile.
+
+</div>
+
+
+<div class="detail-section">
+
+<h3>About</h3>
+
+<p>${p.bio}</p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h3>Services</h3>
+
+<div class="service-pills">
+
+${p.services.map(
+s=>`<span class="service-pill">${s}</span>`
+).join("")}
+
+</div>
+
+</div>
+
+
+<div class="detail-section">
+
+<h3>Safety</h3>
+
+<p>
+✓ Identity verified<br>
+✓ Community reviewed<br>
+✓ In-app communication<br>
+✓ Report and safety tools available
+</p>
+
+</div>
+
+
+<div class="detail-actions">
+
+<button
+class="blue-button"
+onclick="startMessage(${p.id})">
+💬 Message
+</button>
+
+<button
+class="green-button"
+onclick="openBooking(${p.id})">
+📅 Book
+</button>
+
+</div>
+
+<button
+class="danger"
+style="width:100%;margin-top:10px"
+onclick="reportProvider()">
+⚠ Report provider
+</button>
+
+`;
+
+openModal();
+
+}
+
+
+/* =========================
+   BOOKING
+========================= */
+
+function openBooking(id){
+
+selectedProvider=
+providers.find(p=>p.id===id);
+
+if(!selectedProvider)return;
+
+const p=selectedProvider;
+
+
+document.getElementById(
+"modalContent"
+).innerHTML=`
+
+<button class="modal-close" onclick="closeModal()">×</button>
+
+<div class="modal-avatar ${p.color}">
+${p.emoji}
+</div>
+
+<h2>Book ${p.name}</h2>
+
+<p class="modal-sub">${p.service}</p>
+
+<div class="safety-box">
+🛡 <strong>Safety-first booking</strong><br>
+Keep communication and booking details inside Sondelafix.
+</div>
+
+
+<div class="form-group">
+
+<label>Date</label>
+
+<input
+type="date"
+id="bookingDate">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Preferred time</label>
+
+<input
+type="time"
+id="bookingTime"
+value="10:00">
+
+</div>
+
+
+<div class="form-group">
+
+<label>What do you need?</label>
+
+<textarea
+id="bookingNote"
+rows="4"
+placeholder="Tell ${p.name} what you need..."></textarea>
+
+</div>
+
+
+<button
+class="primary"
+onclick="confirmBooking()">
+
+Request booking
+
+</button>
+
+`;
+
+openModal();
+
+}
+
+
+/* =========================
+   CONFIRM BOOKING
+========================= */
+
+function confirmBooking(){
+
+const date=
+document.getElementById("bookingDate").value;
+
+const time=
+document.getElementById("bookingTime").value;
+
+const note=
+document.getElementById("bookingNote").value;
+
+
+if(!date){
+
+alert("Please choose a date.");
+
+return;
+
+}
+
+
+const booking={
+
+id:Date.now(),
+
+customer:currentAccount.name,
+
+providerId:selectedProvider.id,
+
+providerName:selectedProvider.name,
+
+service:selectedProvider.service,
+
+date,
+time,
+note,
+
+status:"Requested"
+
+};
+
+
+bookings.unshift(booking);
+
+saveData();
+
+closeModal();
+
+showPage("bookings");
+
+renderBookings();
+
+alert(
+"Booking request sent to "+selectedProvider.name+"!"
+);
+
+}
+
+
+/* =========================
+   BOOKINGS DISPLAY
+========================= */
+
+function renderBookings(){
+
+const container=
+document.getElementById(
+"bookingsList"
+);
+
+
+let myBookings=
+bookings.filter(
+b=>b.customer===currentAccount.name
+);
+
+
+if(!myBookings.length){
+
+container.innerHTML=`
+
+<div class="empty">
+
+<div class="empty-icon">📅</div>
+
+<h2>No bookings yet</h2>
+
+<p>
+Find a provider and book a service to see your request here.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+container.innerHTML=
+myBookings.map(b=>`
+
+<div class="booking">
+
+<div class="provider-avatar blue">
+📅
+</div>
+
+<div class="booking-details">
+
+<h3>${b.providerName}</h3>
+
+<p>${b.service}</p>
+
+<p>
+📅 ${b.date} &nbsp; 🕐 ${b.time}
+</p>
+
+${b.note?`<p>📝 ${b.note}</p>`:""}
+
+</div>
+
+<span class="status">
+${b.status}
+</span>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================
+   MESSAGES
+========================= */
+
+function startMessage(providerId){
+
+const provider=
+providers.find(p=>p.id===providerId);
+
+if(!provider)return;
+
+closeModal();
+
+showPage("messages");
+
+openChat(provider);
+
+}
+
+
+function getConversation(provider){
+
+let conversation=
+messages.filter(
+m=>
+m.customer===currentAccount.name&&
+m.providerId===provider.id
+);
+
+return conversation;
+
+}
+
+
+function renderMessages(){
+
+const container=
+document.getElementById(
+"messageList"
+);
+
+const conversations=[];
+
+providers.forEach(provider=>{
+
+const conversation=
+getConversation(provider);
+
+if(conversation.length){
+
+conversations.push({
+
+provider,
+
+last:
+conversation[conversation.length-1]
+
+});
+
+}
+
+});
+
+
+if(!conversations.length){
+
+container.innerHTML=`
+
+<div class="empty">
+
+<div class="empty-icon">💬</div>
+
+<h2>Your inbox is quiet</h2>
+
+<p>
+Open a provider profile and press
+<strong>Message</strong> to start a conversation.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+container.innerHTML=
+conversations.map(c=>`
+
+<div
+class="conversation"
+onclick="openChatById(${c.provider.id})">
+
+<div class="provider-avatar ${c.provider.color}">
+${c.provider.emoji}
+</div>
+
+<div class="conversation-info">
+
+<h3>${c.provider.name}</h3>
+
+<p>${c.last.text}</p>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+
+function openChatById(id){
+
+const provider=
+providers.find(p=>p.id===id);
+
+openChat(provider);
+
+}
+
+
+function openChat(provider){
+
+document.getElementById(
+"messagesHome"
+).style.display="none";
+
+const window=
+document.getElementById(
+"chatWindow"
+);
+
+window.style.display="block";
+
+
+const conversation=
+getConversation(provider);
+
+
+window.innerHTML=`
+
+<div class="chat">
+
+<div class="chat-header">
+
+<button
+class="secondary"
+onclick="closeChat()">
+←
+</button>
+
+<div
+class="provider-avatar ${provider.color}"
+style="width:42px;height:42px;font-size:21px">
+${provider.emoji}
+</div>
+
+<div class="chat-header-info">
+
+<strong>${provider.name}</strong>
+
+<small>● Available to chat</small>
+
+</div>
+
+</div>
+
+
+<div
+class="chat-body"
+id="chatBody">
+
+${
+conversation.length
+?
+conversation.map(m=>`
+
+<div class="bubble ${m.sender==="me"?"me":"them"}">
+${m.text}
+</div>
+
+`).join("")
+:
+`<div style="text-align:center;color:#999;font-size:11px;margin:auto">
+Start a conversation with ${provider.name}.
+</div>`
+}
+
+</div>
+
+
+<div class="chat-input">
+
+<input
+id="chatInput"
+placeholder="Type a message..."
+onkeydown="if(event.key==='Enter')sendMessage(${provider.id})">
+
+<button
+class="send"
+onclick="sendMessage(${provider.id})">
+Send
+</button>
+
+</div>
+
+</div>
+
+`;
+
+
+setTimeout(()=>{
+
+const body=
+document.getElementById("chatBody");
+
+if(body)body.scrollTop=body.scrollHeight;
+
+},50);
+
+}
+
+
+function sendMessage(providerId){
+
+const input=
+document.getElementById(
+"chatInput"
+);
+
+const text=
+input.value.trim();
+
+if(!text)return;
+
+
+messages.push({
+
+id:Date.now(),
+
+customer:currentAccount.name,
+
+providerId,
+
+sender:"me",
+
+text
+
+});
+
+
+saveData();
+
+input.value="";
+
+const provider=
+providers.find(p=>p.id===providerId);
+
+openChat(provider);
+
+
+/*
+Demo response from provider.
+This makes the prototype feel interactive.
+*/
+
+setTimeout(()=>{
+
+messages.push({
+
+id:Date.now(),
+
+customer:currentAccount.name,
+
+providerId,
+
+sender:"them",
+
+text:
+"Thanks for your message! I’d be happy to help. What time works best for you?"
+
+});
+
+saveData();
+
+if(
+document.getElementById(
+"chatWindow"
+).style.display!=="none"
+){
+
+openChat(provider);
+
+}
+
+},700);
+
+}
+
+
+function closeChat(){
+
+document.getElementById(
+"chatWindow"
+).style.display="none";
+
+document.getElementById(
+"messagesHome"
+).style.display="block";
+
+renderMessages();
+
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+function renderProfile(){
+
+document.getElementById(
+"miniAvatar"
+).textContent=
+currentAccount.avatar;
+
+document.getElementById(
+"miniName"
+).textContent=
+currentAccount.name;
+
+
+document.getElementById(
+"profileAvatar"
+).textContent=
+currentAccount.avatar;
+
+document.getElementById(
+"profileName"
+).textContent=
+currentAccount.name;
+
+document.getElementById(
+"profileBio"
+).textContent=
+currentAccount.bio||
+"Create your profile to get started.";
+
+
+document.getElementById(
+"profileBookings"
+).textContent=
+bookings.filter(
+b=>b.customer===currentAccount.name
+).length;
+
+
+document.getElementById(
+"profileMessages"
+).textContent=
+messages.filter(
+m=>m.customer===currentAccount.name
+).length;
+
+}
+
+
+function openProfileEditor(){
+
+const a=currentAccount;
+
+document.getElementById(
+"modalContent"
+).innerHTML=`
+
+<button class="modal-close" onclick="closeModal()">×</button>
+
+<div class="kicker">YOUR PROFILE</div>
+
+<h2>Edit profile</h2>
+
+<p class="modal-sub">
+This is your prototype account.
+</p>
+
+
+<div class="form-group">
+
+<label>Your name</label>
+
+<input
+id="profileEditName"
+value="${a.name}">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Choose avatar</label>
+
+<select id="profileEditAvatar">
+
+<option ${a.avatar==="👩🏾"?"selected":""}>👩🏾</option>
+<option ${a.avatar==="👨🏾"?"selected":""}>👨🏾</option>
+<option ${a.avatar==="👩🏽"?"selected":""}>👩🏽</option>
+<option ${a.avatar==="👨🏽"?"selected":""}>👨🏽</option>
+<option ${a.avatar==="🧑🏾"?"selected":""}>🧑🏾</option>
+<option ${a.avatar==="👩🏿"?"selected":""}>👩🏿</option>
+<option ${a.avatar==="👨🏿"?"selected":""}>👨🏿</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Account type</label>
+
+<select id="profileEditType">
+
+<option ${a.type==="Customer"?"selected":""}>
+Customer
+</option>
+
+<option ${a.type==="Provider"?"selected":""}>
+Provider
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>Location / area</label>
+
+<input
+id="profileEditLocation"
+value="${a.location||""}"
+placeholder="e.g. Sandton">
+
+</div>
+
+
+<div class="form-group">
+
+<label>Phone number</label>
+
+<input
+id="profileEditPhone"
+value="${a.phone||""}"
+placeholder="071 000 0000">
+
+</div>
+
+
+<div class="form-group">
+
+<label>About you</label>
+
+<textarea
+id="profileEditBio"
+rows="4"
+placeholder="Tell people about yourself...">${a.bio||""}</textarea>
+
+</div>
+
+
+<button
+class="primary"
+onclick="saveProfile()">
+
+Save profile
+
+</button>
+
+`;
+
+openModal();
+
+}
+
+
+function saveProfile(){
+
+currentAccount.name=
+document.getElementById(
+"profileEditName"
+).value.trim()||"Demo User";
+
+currentAccount.avatar=
+document.getElementById(
+"profileEditAvatar"
+).value;
+
+currentAccount.type=
+document.getElementById(
+"profileEditType"
+).value;
+
+currentAccount.location=
+document.getElementById(
+"profileEditLocation"
+).value;
+
+currentAccount.phone=
+document.getElementById(
+"profileEditPhone"
+).value;
+
+currentAccount.bio=
+document.getElementById(
+"profileEditBio"
+).value;
+
+
+saveData();
+
+closeModal();
+
+renderProfile();
+
+alert("Your prototype profile has been saved!");
+
+}
+
+
+/* =========================
+   PROVIDER PROFILE CREATOR
+========================= */
+
+function createProviderProfile(){
+
+document.getElementById(
+"modalContent"
+).innerHTML=`
+
+<button class="modal-close" onclick="closeModal()">×</button>
+
+<div class="kicker">GROW WITH SONDELAFIX</div>
+
+<h2>Become a provider</h2>
+
+<p class="modal-sub">
+Create your demo provider profile.
+</p>
+
+
+<div class="form-group">
+<label>Business / provider name</label>
+<input id="providerName" placeholder="e.g. Tumi's Plumbing">
+</div>
+
+
+<div class="form-group">
+<label>Service</label>
+<input id="providerService" placeholder="e.g. Plumbing">
+</div>
+
+
+<div class="form-group">
+<label>Your area</label>
+<input id="providerArea" placeholder="e.g. Midrand">
+</div>
+
+
+<div class="form-group">
+<label>About your service</label>
+<textarea id="providerBio" rows="4"></textarea>
+</div>
+
+
+<button class="primary" onclick="saveProviderProfile()">
+Create demo provider
+</button>
+
+`;
+
+openModal();
+
+}
+
+
+function saveProviderProfile(){
+
+const name=
+document.getElementById(
+"providerName"
+).value.trim();
+
+const service=
+document.getElementById(
+"providerService"
+).value.trim();
+
+const area=
+document.getElementById(
+"providerArea"
+).value.trim();
+
+const bio=
+document.getElementById(
+"providerBio"
+).value.trim();
+
+
+if(!name||!service){
+
+alert("Please enter a provider name and service.");
+
+return;
+
+}
+
+
+const provider={
+
+id:Date.now(),
+
+name,
+
+service,
+
+category:"repairs",
+
+rating:5.0,
+
+reviews:0,
+
+price:"Contact for quote",
+
+lat:-26.1076,
+
+lng:28.0567,
+
+area:area||"Local area",
+
+emoji:"💼",
+
+color:"blue",
+
+bio:
+bio||"A new local Sondelafix service provider.",
+
+services:[service],
+
+verified:false
+
+};
+
+
+providers.push(provider);
+
+
+currentAccount={
+
+id:"customProvider_"+Date.now(),
+
+name,
+
+avatar:"💼",
+
+type:"Provider",
+
+bio:provider.bio,
+
+location:provider.area,
+
+phone:""
+
+};
+
+
+saveData();
+
+closeModal();
+
+renderProfile();
+
+showPage("profile");
+
+
+alert(
+"Your demo provider profile has been created!"
+);
+
+}
+
+
+/* =========================
+   ACCOUNT SWITCHER
+========================= */
+
+function openAccountSwitcher(){
+
+document.getElementById(
+"modalContent"
+).innerHTML=`
+
+<button class="modal-close" onclick="closeModal()">×</button>
+
+<div class="kicker">DEMO MODE</div>
+
+<h2>Switch account</h2>
+
+<p class="modal-sub">
+Use these accounts to demonstrate different sides of Sondelafix.
+</p>
+
+<div style="display:grid;gap:10px;margin-top:18px">
+
+${accounts.map(a=>`
+
+<button
+class="conversation"
+style="text-align:left"
+onclick="switchAccount('${a.id}')">
+
+<div class="mini-avatar">
+${a.avatar}
+</div>
+
+<div class="conversation-info">
+
+<h3>${a.name}</h3>
+
+<p>
+${a.type} • ${a.location}
+</p>
+
+</div>
+
+</button>
+
+`).join("")}
+
+</div>
+
+
+<button
+class="secondary"
+style="width:100%;margin-top:15px"
+onclick="openProfileEditor()">
+
+✏️ Create/edit my own demo profile
+
+</button>
+
+`;
+
+openModal();
+
+}
+
+
+function switchAccount(id){
+
+const account=
+accounts.find(
+a=>a.id===id
+);
+
+if(!account)return;
+
+currentAccount={
+...account
+};
+
+saveData();
+
+closeModal();
+
+renderProfile();
+
+renderBookings();
+
+renderMessages();
+
+alert(
+"Switched to "+currentAccount.name
+);
+
+}
+
+
+/* =========================
+   SAFETY CENTRE
+========================= */
+
+function showSafety(){
+
+document.getElementById(
+"modalContent"
+).innerHTML=`
+
+<button class="modal-close" onclick="closeModal()">×</button>
+
+<div class="kicker">SONDELAFIX SAFETY</div>
+
+<h2>Safety comes first. 🛡</h2>
+
+<p class="modal-sub">
+The prototype is designed around safer local connections.
+</p>
+
+
+<div class="detail-section">
+
+<h3>✓ Verified identities</h3>
+
+<p>
+Providers can complete identity verification before receiving a verified badge.
+</p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h3>⭐ Community reviews</h3>
+
+<p>
+Customers can rate providers after completed jobs, helping the community make informed decisions.
+</p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h3>💬 In-app communication</h3>
+
+<p>
+Keep conversations inside Sondelafix rather than immediately sharing personal contact details.
+</p>
+
+</div>
+
+
+<div class="detail-section">
+
+<h3>⚠ Reporting</h3>
+
+<p>
+Users can report inappropriate behaviour or suspicious accounts.
+</p>
+
+</div>
+
+
+<div class="safety-box">
+<strong>Prototype note:</strong><br>
+These features are currently simulated. A production version would require a secure backend,
+real authentication, identity verification, moderation and proper data protection.
+</div>
+
+<button
+class="primary"
+onclick="closeModal()">
+
+Got it
+
+</button>
+
+`;
+
+openModal();
+
+}
+
+
+function reportProvider(){
+
+alert(
+"Demo report submitted. In the real app this would be sent to the Sondelafix safety/moderation team."
+);
+
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+function openModal(){
+
+document.getElementById(
+"modal"
+).classList.add("show");
+
+}
+
+
+function closeModal(){
+
+document.getElementById(
+"modal"
+).classList.remove("show");
+
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+function homeSearch(event){
+
+if(event.key==="Enter"){
+
+searchFromHome();
+
+}
+
+}
+
+
+function searchFromHome(){
+
+const value=
+document.getElementById(
+"homeSearch"
+).value;
+
+showPage("explore");
+
+document.getElementById(
+"searchInput"
+).value=value;
+
+renderExplore();
+
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showPage(page){
+
+const pages=[
+"home",
+"explore",
+"bookings",
+"messages",
+"profile"
+];
+
+
+pages.forEach(name=>{
+
+const element=
+document.getElementById(
+name+"Page"
+);
+
+if(element){
+
+element.style.display=
+name===page
+?"block"
+:"none";
+
+}
+
+});
+
+
+document
+.querySelectorAll(".nav")
+.forEach(
+n=>n.classList.remove("active")
+);
+
+
+const nav=
+document.getElementById(
+"nav-"+page
+);
+
+if(nav)nav.classList.add("active");
+
+
+if(page==="explore"){
+
+renderFilters();
+renderExplore();
+
+}
+
+
+if(page==="bookings"){
+
+renderBookings();
+
+}
+
+
+if(page==="messages"){
+
+closeChat();
+renderMessages();
+
+}
+
+
+if(page==="profile"){
+
+renderProfile();
+
+}
+
+}
+
+
+/* =========================
+   MODAL OUTSIDE CLICK
+========================= */
+
+document.getElementById(
+"modal"
+).addEventListener(
+"click",
+function(e){
+
+if(e.target===this){
+
+closeModal();
+
+}
+
+});
+
+
+/* =========================
+   RESTORE DEMO LOCATION
+========================= */
+
+const savedLocation=
+JSON.parse(
+localStorage.getItem(
+"sondelafixLocation"
+)
+);
+
+if(savedLocation){
+
+customerLocation=
+savedLocation;
+
+document.getElementById(
+"locationBanner"
+).style.display="none";
+
+document.getElementById(
+"locationCTA"
+).style.display="none";
+
+}
+
+
+/* =========================
+   INITIALISE
+========================= */
+
+renderCategories();
+
+renderFilters();
+
+renderHomeProviders();
+
+renderBookings();
+
+renderMessages();
+
+renderProfile();
+
+</script>
+
+</body>
+</html>
